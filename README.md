@@ -18,6 +18,41 @@ It demonstrates how to build a **production-style data pipeline** with:
 
 ### Architecture
 
+
+```mermaid
+graph TD
+    subgraph Raw_Layer [Raw Sources]
+        A[Synthea CSV Data]
+    end
+
+    subgraph Bronze_Layer [Bronze: Ingestion]
+        B[Auto Loader / cloudFiles]
+        B1["_rescued_data (Malformed)"]
+    end
+
+    subgraph Silver_Layer [Silver: Cleaned]
+        C{DLT Expectations}
+        D[Standardized Tables]
+        C -->|expect_or_fail| E[Failed Records]
+        C -->|expect / drop| D
+    end
+
+    subgraph Gold_Layer [Gold: Analytics]
+        F[patient_summary]
+        G[claims_cost_per_patient]
+        H[top_conditions]
+    end
+
+    A --> B
+    B --> C
+    D --> F
+    D --> G
+    D --> H
+
+    style Bronze_Layer fill:#f9f,stroke:#333,stroke-width:2px
+    style Silver_Layer fill:#bbf,stroke:#333,stroke-width:2px
+    style Gold_Layer fill:#bfb,stroke:#333,stroke-width:2px
+```
 #### Bronze — Raw Ingestion
 - Ingested Synthea healthcare CSV data using Auto Loader (`cloudFiles`)
 - Enabled schema inference and evolution
