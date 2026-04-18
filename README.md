@@ -20,38 +20,35 @@ It demonstrates how to build a **production-style data pipeline** with:
 
 
 ```mermaid
-graph TD
-    subgraph Raw_Layer [Raw Sources]
-        A[Synthea CSV Data]
+graph LR
+    subgraph Raw
+        A[Synthea CSVs]
     end
 
-    subgraph Bronze_Layer [Bronze: Ingestion]
-        B[Auto Loader / cloudFiles]
-        B1["_rescued_data (Malformed)"]
+    subgraph Bronze
+        B[Auto Loader]
     end
 
-    subgraph Silver_Layer [Silver: Cleaned]
-        C{DLT Expectations}
-        D[Standardized Tables]
-        C -->|expect_or_fail| E[Failed Records]
-        C -->|expect / drop| D
+    subgraph Silver
+        C{Data Quality}
+        D[Standardized]
     end
 
-    subgraph Gold_Layer [Gold: Analytics]
-        F[patient_summary]
-        G[claims_cost_per_patient]
-        H[top_conditions]
+    subgraph Gold
+        E[Patient Summary]
+        F[Financials]
+        G[Top Trends]
     end
 
     A --> B
     B --> C
-    D --> F
-    D --> G
-    D --> H
+    C -->|Clean| D
+    D --> E & F & G
 
-    style Bronze_Layer fill:#f9f,stroke:#333,stroke-width:2px
-    style Silver_Layer fill:#bbf,stroke:#333,stroke-width:2px
-    style Gold_Layer fill:#bfb,stroke:#333,stroke-width:2px
+    %% Styling for compact look
+    style Bronze fill:#cd7f32,stroke:#333,color:#fff
+    style Silver fill:#c0c0c0,stroke:#333
+    style Gold fill:#ffd700,stroke:#333
 ```
 #### Bronze — Raw Ingestion
 - Ingested Synthea healthcare CSV data using Auto Loader (`cloudFiles`)
