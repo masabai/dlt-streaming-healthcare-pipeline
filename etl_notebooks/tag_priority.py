@@ -1,4 +1,4 @@
-testing_schema = "patient_data_governance.testing"
+testing_schema = "patient_data_governance.silver"
 
 tables = spark.sql(f"SHOW TABLES IN {testing_schema}").collect()
 

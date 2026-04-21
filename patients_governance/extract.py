@@ -1,6 +1,7 @@
+%python
 # Define volume paths
-volume_path = "/Volumes/patient_data_governance/bronze/raw_files/csv/"
-target_schema = "patient_data_governance.silver"
+volume_path = "/Volumes/patients_governance/bronze/raw_data/csv/"
+target_schema = "patients_governance.bronze"
 
 # List all files in the volume folder
 files = dbutils.fs.ls(volume_path)
@@ -20,4 +21,4 @@ for file in files:
          .write.mode("overwrite")
          .saveAsTable(f"{target_schema}.{table_name}"))
 
-print("--- PHASE 1 COMPLETE: 18 Tables are live  ---")
+print("--- PHASE 1 COMPLETE: 18 Tables in Bronze  ---")

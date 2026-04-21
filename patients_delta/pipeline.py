@@ -41,7 +41,7 @@ def to_snake_case(df):
 # ====================================================================================================
 
 @sdp.table(
-    name="patient_data_governance.bronze.patients_bronze",
+    name="patient_delta.bronze.patients_bronze",
     comment="Raw Synthea patients ingested via Auto Loader",
     table_properties={"quality": "bronze"}
 )
@@ -53,13 +53,13 @@ def to_snake_case(df):
 @sdp.expect("valid_gender", "GENDER IN ('M', 'F', 'O', 'U')")
 @sdp.expect("no_future_death", "DEATHDATE IS NULL OR DEATHDATE <= current_date()")
 def patients_bronze():
-    return build_bronze_stream(source_path="/Volumes/patient_data_governance/bronze/raw_data/csv/patients/",
-                               schema_location="/Volumes/patient_data_governance/bronze/raw_data/checkpoints/schema_patients"
+    return build_bronze_stream(source_path="/Volumes/patient_delta/bronze/raw_data/csv/patients/",
+                               schema_location="/Volumes/patient_delta/bronze/raw_data/checkpoints/schema_patients"
                                )
 
 
 @sdp.table(
-    name="patient_data_governance.bronze.encounters_bronze",
+    name="patient_delta.bronze.encounters_bronze",
     comment="Raw Synthea encounters ingested via Auto Loader",
     table_properties={"quality": "bronze"}
 )
@@ -72,13 +72,13 @@ def patients_bronze():
 @sdp.expect("non_negative_base_cost", "BASE_ENCOUNTER_COST IS NULL OR BASE_ENCOUNTER_COST >= 0")
 @sdp.expect("non_negative_coverage", "PAYER_COVERAGE IS NULL OR PAYER_COVERAGE >= 0")
 def encounters_bronze():
-    return build_bronze_stream(source_path="/Volumes/patient_data_governance/bronze/raw_data/csv/encounters/",
-                               schema_location="/Volumes/patient_data_governance/bronze/raw_data/checkpoints/schema_encounters"
+    return build_bronze_stream(source_path="/Volumes/patient_delta/bronze/raw_data/csv/encounters/",
+                               schema_location="/Volumes/patient_delta/bronze/raw_data/checkpoints/schema_encounters"
                                )
 
 
 @sdp.table(
-    name="patient_data_governance.bronze.claims_bronze",
+    name="patient_delta.bronze.claims_bronze",
     comment="Raw Synthea claims ingested via Auto Loader",
     table_properties={"quality": "bronze"}
 )
@@ -87,13 +87,13 @@ def encounters_bronze():
 @sdp.expect("provider_not_null", "PROVIDERID IS NOT NULL")
 @sdp.expect("service_date_not_null", "SERVICEDATE IS NOT NULL")
 def claims_bronze():
-    return build_bronze_stream(source_path="/Volumes/patient_data_governance/bronze/raw_data/csv/claims/",
-                               schema_location="/Volumes/patient_data_governance/bronze/raw_data/checkpoints/schema_claims"
+    return build_bronze_stream(source_path="/Volumes/patient_delta/bronze/raw_data/csv/claims/",
+                               schema_location="/Volumes/patient_delta/bronze/raw_data/checkpoints/schema_claims"
                                )
 
 
 @sdp.table(
-    name="patient_data_governance.bronze.allergies_bronze",
+    name="patient_delta.bronze.allergies_bronze",
     comment="Raw Synthea allergiess ingested via Auto Loader",
     table_properties={"quality": "bronze"}
 )
@@ -101,13 +101,13 @@ def claims_bronze():
 @sdp.expect("patient_not_null", "PATIENT IS NOT NULL")
 @sdp.expect("start_not_null", "START IS NOT NULL")
 def allergies_bronze():
-    return build_bronze_stream(source_path="/Volumes/patient_data_governance/bronze/raw_data/csv/allergies/",
-                               schema_location="/Volumes/patient_data_governance/bronze/raw_data/checkpoints/schema_allergies"
+    return build_bronze_stream(source_path="/Volumes/patient_delta/bronze/raw_data/csv/allergies/",
+                               schema_location="/Volumes/patient_delta/bronze/raw_data/checkpoints/schema_allergies"
                                )
 
 
 @sdp.table(
-    name="patient_data_governance.bronze.conditions_bronze",
+    name="patient_delta.bronze.conditions_bronze",
     comment="Raw Synthea conditions ingested via Auto Loader",
     table_properties={"quality": "bronze"}
 )
@@ -115,13 +115,13 @@ def allergies_bronze():
 @sdp.expect("patient_not_null", "PATIENT IS NOT NULL")
 @sdp.expect("start_not_null", "START IS NOT NULL")
 def conditions_bronze():
-    return build_bronze_stream(source_path="/Volumes/patient_data_governance/bronze/raw_data/csv/conditions/",
-                               schema_location="/Volumes/patient_data_governance/bronze/raw_data/checkpoints/schema_conditions"
+    return build_bronze_stream(source_path="/Volumes/patient_delta/bronze/raw_data/csv/conditions/",
+                               schema_location="/Volumes/patient_delta/bronze/raw_data/checkpoints/schema_conditions"
                                )
 
 
 @sdp.table(
-    name="patient_data_governance.bronze.medications_bronze",
+    name="patient_delta.bronze.medications_bronze",
     comment="Raw Synthea medications ingested via Auto Loader",
     table_properties={"quality": "bronze"}
 )
@@ -129,13 +129,13 @@ def conditions_bronze():
 @sdp.expect("patient_not_null", "PATIENT IS NOT NULL")
 @sdp.expect("start_not_null", "START IS NOT NULL")
 def medications_bronze():
-    return build_bronze_stream(source_path="/Volumes/patient_data_governance/bronze/raw_data/csv/medications/",
-                               schema_location="/Volumes/patient_data_governance/bronze/raw_data/checkpoints/schema_medications"
+    return build_bronze_stream(source_path="/Volumes/patient_delta/bronze/raw_data/csv/medications/",
+                               schema_location="/Volumes/patient_delta/bronze/raw_data/checkpoints/schema_medications"
                                )
 
 
 @sdp.table(
-    name="patient_data_governance.bronze.observations_bronze",
+    name="patient_delta.bronze.observations_bronze",
     comment="Raw Synthea observations ingested via Auto Loader",
     table_properties={"quality": "bronze"}
 )
@@ -143,8 +143,8 @@ def medications_bronze():
 @sdp.expect("patient_not_null", "PATIENT IS NOT NULL")
 @sdp.expect("date_not_null", "DATE IS NOT NULL")
 def observations_bronze():
-    return build_bronze_stream(source_path="/Volumes/patient_data_governance/bronze/raw_data/csv/observations/",
-                               schema_location="/Volumes/patient_data_governance/bronze/raw_data/checkpoints/schema_observations"
+    return build_bronze_stream(source_path="/Volumes/patient_delta/bronze/raw_data/csv/observations/",
+                               schema_location="/Volumes/patient_delta/bronze/raw_data/checkpoints/schema_observations"
                                )
 
 
@@ -152,13 +152,13 @@ def observations_bronze():
 # SILVER LAYER - DATA CLEANING
 # ====================================================================================================
 @sdp.table(
-    name="patient_data_governance.testing.patients_silver",
+    name="patient_delta.silver.patients_silver",
     comment="Cleaned patients - Silver layer",
-    table_properties={"quality": "testing"}
+    table_properties={"quality": "silver"}
 )
 # TABLE : PATIENTS
 def patients_silver():
-    df = spark.read.table("patient_data_governance.bronze.patients_bronze")
+    df = spark.read.table("patient_delta.bronze.patients_bronze")
     df = df.filter(col("Id").isNotNull())
     df = df.filter(col("GENDER").isin(['M', 'F', 'O', 'U']))
     df = to_snake_case(df)
@@ -177,12 +177,12 @@ def patients_silver():
 
 # TABLE : CLAIMS
 @sdp.table(
-    name="patient_data_governance.testing.claims_silver",
+    name="patient_delta.silver.claims_silver",
     comment="Cleaned claims - Silver layer",
-    table_properties={"quality": "testing"}
+    table_properties={"quality": "silver"}
 )
 def claims_silver():
-    df = spark.read.table("patient_data_governance.bronze.claims_bronze")
+    df = spark.read.table("patient_delta.bronze.claims_bronze")
     df = df.filter(col("Id").isNotNull())
     df = df.filter(col("PATIENTID").isNotNull())
     df = df.filter(col("SERVICEDATE").isNotNull())
@@ -246,13 +246,13 @@ def claims_silver():
 
 # TABLE: ENCOUNTERS
 @sdp.table(
-    name="patient_data_governance.testing.encounters_silver",
+    name="patient_delta.silver.encounters_silver",
     comment="Cleaned encounters - Silver layer",
-    table_properties={"quality": "testing"}
+    table_properties={"quality": "silver"}
 )
 def encounters_silver():
     # Read Bronze
-    df = spark.read.table("patient_data_governance.bronze.encounters_bronze")
+    df = spark.read.table("patient_delta.bronze.encounters_bronze")
     df = df.filter(col("Id").isNotNull())
     df = df.filter(col("PATIENT").isNotNull())
     df = df.filter(col("START").isNotNull())
@@ -296,12 +296,12 @@ def encounters_silver():
 
 # Patients' summary
 @sdp.table(
-    name="patient_data_governance.gold.patient_summary",
+    name="patient_delta.gold.patient_summary",
     comment="Gold: patient-level health summary"
 )
 def patient_summary():
-    patients = spark.read.table("patient_data_governance.testing.patients_silver")
-    encounters = spark.read.table("patient_data_governance.testing.encounters_silver")
+    patients = spark.read.table("patient_delta.silver.patients_silver")
+    encounters = spark.read.table("patient_delta.silver.encounters_silver")
 
     enc_count = encounters.groupBy("patient_id").count()
 
@@ -317,11 +317,11 @@ def patient_summary():
 
 # Encounters per patient
 @sdp.table(
-    name="patient_data_governance.gold.encounters_per_patient",
+    name="patient_delta.gold.encounters_per_patient",
     comment="Gold: number of encounters per patient"
 )
 def encounters_per_patient():
-    df = spark.read.table("patient_data_governance.testing.encounters_silver")
+    df = spark.read.table("patient_delta.silver.encounters_silver")
 
     return df.groupBy("patient_id").count().selectExpr(
         "patient_id",
@@ -331,11 +331,11 @@ def encounters_per_patient():
 
 # Claims cost per patient
 @sdp.table(
-    name="patient_data_governance.gold.claims_cost_per_patient",
+    name="patient_delta.gold.claims_cost_per_patient",
     comment="Gold: total healthcare cost per patient"
 )
 def claims_cost_per_patient():
-    df = spark.read.table("patient_data_governance.testing.claims_silver")
+    df = spark.read.table("patient_delta.silver.claims_silver")
 
     return df.groupBy("patient_id").agg(
         {"outstanding1": "sum",
@@ -352,32 +352,32 @@ def claims_cost_per_patient():
 
 # Top Conditions : Most common dieases
 @sdp.table(
-    name="patient_data_governance.gold.top_conditions",
+    name="patient_delta.gold.top_conditions",
     comment="Gold: most frequent conditions"
 )
 def top_conditions():
-    df = spark.read.table("patient_data_governance.bronze.conditions_bronze")
+    df = spark.read.table("patient_delta.bronze.conditions_bronze")
 
     return df.groupBy("description").count().orderBy("count", ascending=False)
 
 
 # Top Medications
 @sdp.table(
-    name="patient_data_governance.gold.top_medications",
+    name="patient_delta.gold.top_medications",
     comment="Gold: most prescribed medications"
 )
 def top_medications():
-    df = spark.read.table("patient_data_governance.bronze.medications_bronze")
+    df = spark.read.table("patient_delta.bronze.medications_bronze")
 
     return df.groupBy("description").count().orderBy("count", ascending=False)
 
 
 # Allergy Frequency
 @sdp.table(
-    name="patient_data_governance.gold.top_allergies",
+    name="patient_delta.gold.top_allergies",
     comment="Gold: most common allergies"
 )
 def top_allergies():
-    df = spark.read.table("patient_data_governance.bronze.allergies_bronze")
+    df = spark.read.table("patient_delta.bronze.allergies_bronze")
 
     return df.groupBy("description").count().orderBy("count", ascending=False)

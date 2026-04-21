@@ -29,7 +29,7 @@ def get_ai_description(column_name, table_name):
         return f"Healthcare attribute {column_name} (Auto-fallback due to: {str(e)[:50]})"
 
 # Target the Silver Layer
-testing_schema = "patient_data_governance.testing"
+testing_schema = "patient_data_governance.silver"
 tables = spark.sql(f"SHOW TABLES IN {testing_schema}").collect()
 
 for table in tables:

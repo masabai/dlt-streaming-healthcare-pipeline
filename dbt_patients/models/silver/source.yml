@@ -1,9 +1,9 @@
 version: 2
 
 sources:
-  - name: patients
-    database: patient_data_governance
-    schema: testing
+  - name: dbt_patients
+    database: patients_governance
+    schema: bronze
 
     tables:
 
