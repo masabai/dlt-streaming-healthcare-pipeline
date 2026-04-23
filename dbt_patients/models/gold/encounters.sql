@@ -1,0 +1,1 @@
+SELECT * FROM {{ source('dbt_patients', 'encounters') }}

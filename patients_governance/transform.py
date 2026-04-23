@@ -143,15 +143,15 @@ def encounters_silver():
     )
 
 
-# Write cleaned tables in silver
+# Write cleaned tables in gold
 df_patients = patients_silver()
-df_patients.write.mode("overwrite").saveAsTable("patients_governance.silver.patients_silver")
+df_patients.write.mode("overwrite").saveAsTable("patients_governance.gold.patients_silver")
 
 df_claims = claims_silver()
-df_claims.write.mode("overwrite").saveAsTable("patients_governance.silver.claims_silver")
+df_claims.write.mode("overwrite").saveAsTable("patients_governance.gold.claims_silver")
 
 df_encounters = encounters_silver()
-df_encounters.write.mode("overwrite").saveAsTable("patients_governance.silver.encounters_silver")
+df_encounters.write.mode("overwrite").saveAsTable("patients_governance.gold.encounters_silver")
 
 
 

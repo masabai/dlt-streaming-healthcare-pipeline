@@ -1,5 +1,5 @@
+{{ config(materialized='table') }}
 
-CREATE OR REPLACE VIEW patient_data_governance.gold.ai_enriched_allergies AS
 SELECT
   description,
   ai_query(
@@ -7,4 +7,4 @@ SELECT
     'Write a short data catalog definition in 21 words max. No medical explanation, no paragraphs: '
     || description
   ) AS ai_summary
-FROM patient_data_governance.silver.allergies;
+FROM {{ source('dbt_patients', 'allergies') }}

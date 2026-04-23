@@ -1,4 +1,15 @@
-## Healthcare Lakehouse with Delta Live Tables (DLT)
+## Phase I: Healthcare Lakehouse with dbt-based ETL (Previous Design)
+
+Earlier version of this project used a dbt-based ETL pipeline on Databricks.
+
+- Built Bronze → Silver → Gold layers using dbt models  
+- Used `dbt run` for transformations across layers  
+- Applied basic data tests (`not_null`, `unique`) on key tables like patients, encounters, and claims  
+- Pipeline logic was spread across multiple dbt models
+
+ *ETL job run (Phase I – previous design)*
+screenshot here 
+## Phase II: Healthcare Lakehouse with Delta Live Tables (DLT)
 
 **Built a declarative healthcare data pipeline using Delta Live Tables with integrated data quality and streaming ingestion.**
 
@@ -52,77 +63,35 @@ graph LR
 ```
 #### Bronze — Raw Ingestion
 - Ingested Synthea healthcare CSV data using Auto Loader (`cloudFiles`)
-- Enabled schema inference and evolution
-- Captured malformed records in `_rescued_data`
 - Applied data quality checks at ingestion
 
 ---
 
 #### Silver — Data Cleaning & Standardization
-- Standardized column names using `snake_case`
-- Filtered invalid records (nulls, invalid values)
-- Casted fields to appropriate data types
-- Produced clean, structured datasets
+- Cleaned and standardized datasets
+- Handled nulls and type casting
 
 ---
 
 #### Gold — Analytics Layer
 
-**Built aggregated, business-ready tables:**
-- `patient_summary` → patient demographics + encounter counts  
-- `encounters_per_patient` → visit frequency  
-- `claims_cost_per_patient` → financial aggregation  
-- `top_conditions`, `top_medications`, `top_allergies` → frequency analysis  
+**Built business-ready and AI-enriched tables for analytics and exploration.**
+
+- AI-generated semantic mapping of healthcare description fields into short human-readable meanings using `ai_query`
+- Aggregated EDA tables such as `top_conditions`
+- Summary statistics tables like `ai_summary_stats` for text and field-level insights
 
 ---
+### DLT Features Used
 
-### Delta Live Tables (Core)
-
-- Defined pipelines using:
-  - `@dlt.table`
-  - `@dlt.expect` and `@dlt.expect_or_fail`
-- Used declarative transformations instead of manual orchestration
-- Enabled automatic:
-  - Dependency management  
-  - Scheduling  
-  - Lineage tracking  
-
----
-
-### Data Quality
-
-Implemented DLT expectations directly in the pipeline:
-
-- Enforced critical constraints (`expect_or_fail`)
-- Logged non-critical issues (`expect`)
-
-**Examples:**
-- Non-null IDs  
-- Valid timestamps  
-- Non-negative financial values  
-
-Data quality is enforced **within the pipeline**, not as a separate step
-
----
-
-### Key Features
-
-- Declarative pipeline design (DLT)
-- Streaming ingestion with Auto Loader
-- Built-in data validation framework
-- Medallion architecture (Bronze → Silver → Gold)
-- Reusable ingestion and transformation functions
-
----
-
-### Key Takeaway
-
-Demonstrates how to build a **reliable, declarative data pipeline** using Delta Live Tables by integrating ingestion, transformation, and data quality into a single managed workflow.
+- `@dlt.table` for declarative pipeline
+- `@dlt.expect` for data quality checks
+- Automatic lineage and dependency handling
+- Built-in orchestration (no external scheduler)
 
 ---
 
 ### Design Decision
 
-Initially implemented using a multi-tool approach (dbt-based transformations), then migrated to a unified Delta Live Tables pipeline to simplify orchestration, integrate data quality, and reduce operational complexity.
-
-Highlights a shift from fragmented ETL tools to a **managed, declarative pipeline architecture**.
+DLT made things easier because I didn’t have to manage job order or dependencies across multiple models. 
+It just figures out the pipeline flow from the tables themselves.

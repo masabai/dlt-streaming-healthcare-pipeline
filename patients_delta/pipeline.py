@@ -152,9 +152,9 @@ def observations_bronze():
 # SILVER LAYER - DATA CLEANING
 # ====================================================================================================
 @sdp.table(
-    name="patient_delta.silver.patients_silver",
+    name="patient_delta.gold.patients_silver",
     comment="Cleaned patients - Silver layer",
-    table_properties={"quality": "silver"}
+    table_properties={"quality": "gold"}
 )
 # TABLE : PATIENTS
 def patients_silver():
@@ -177,9 +177,9 @@ def patients_silver():
 
 # TABLE : CLAIMS
 @sdp.table(
-    name="patient_delta.silver.claims_silver",
+    name="patient_delta.gold.claims_silver",
     comment="Cleaned claims - Silver layer",
-    table_properties={"quality": "silver"}
+    table_properties={"quality": "gold"}
 )
 def claims_silver():
     df = spark.read.table("patient_delta.bronze.claims_bronze")
@@ -246,9 +246,9 @@ def claims_silver():
 
 # TABLE: ENCOUNTERS
 @sdp.table(
-    name="patient_delta.silver.encounters_silver",
+    name="patient_delta.gold.encounters_silver",
     comment="Cleaned encounters - Silver layer",
-    table_properties={"quality": "silver"}
+    table_properties={"quality": "gold"}
 )
 def encounters_silver():
     # Read Bronze
@@ -300,8 +300,8 @@ def encounters_silver():
     comment="Gold: patient-level health summary"
 )
 def patient_summary():
-    patients = spark.read.table("patient_delta.silver.patients_silver")
-    encounters = spark.read.table("patient_delta.silver.encounters_silver")
+    patients = spark.read.table("patient_delta.gold.patients_silver")
+    encounters = spark.read.table("patient_delta.gold.encounters_silver")
 
     enc_count = encounters.groupBy("patient_id").count()
 
@@ -321,7 +321,7 @@ def patient_summary():
     comment="Gold: number of encounters per patient"
 )
 def encounters_per_patient():
-    df = spark.read.table("patient_delta.silver.encounters_silver")
+    df = spark.read.table("patient_delta.gold.encounters_silver")
 
     return df.groupBy("patient_id").count().selectExpr(
         "patient_id",
@@ -335,7 +335,7 @@ def encounters_per_patient():
     comment="Gold: total healthcare cost per patient"
 )
 def claims_cost_per_patient():
-    df = spark.read.table("patient_delta.silver.claims_silver")
+    df = spark.read.table("patient_delta.gold.claims_silver")
 
     return df.groupBy("patient_id").agg(
         {"outstanding1": "sum",

@@ -65,49 +65,45 @@ sources:
               - not_null
 
       # =========================
-      # KEEP (DO NOT BREAK MODELS)
+      # 4: allergies
       # =========================
       - name: allergies
-        description: "Raw healthcare data for allergies"
-
-      - name: careplans
-        description: "Raw healthcare data for careplans"
-
-      - name: claims_transactions
-        description: "Raw healthcare data for claims_transactions"
-
+        description: "Patient allergy records from clinical system."
+        columns:
+          - name: Id
+            tests:
+              - not_null
+              - unique
+      # =========================
+      # 5: conditions
+      # =========================
       - name: conditions
-        description: "Raw healthcare data for conditions"
+        description: "Condition recorded for the patient encounter."
+        columns:
+          - name: PATIENT
+            tests:
+              - not_null
+              - unique
 
-      - name: devices
-        description: "Raw healthcare data for devices"
-
-      - name: imaging_studies
-        description: "Raw healthcare data for imaging_studies"
-
-      - name: immunizations
-        description: "Raw healthcare data for immunizations"
-
+      # =========================
+      # 6: medications
+      # =========================
       - name: medications
-        description: "Raw healthcare data for medications"
+        description: "Medical condition recorded for the patient encounter."
+        columns:
+          - name: PATIENT
+            tests:
+              - not_null
+              - unique
 
+      # =========================
+      # 7: observations
+      # =========================
       - name: observations
-        description: "Raw healthcare data for observations"
+        description: "Observation recorded for the patient encounter."
+        columns:
+          - name: PATIENT
+            tests:
+              - not_null
+              - unique
 
-      - name: organizations
-        description: "Raw healthcare data for organizations"
-
-      - name: payer_transitions
-        description: "Raw healthcare data for payer_transitions"
-
-      - name: payers
-        description: "Raw healthcare data for payers"
-
-      - name: procedures
-        description: "Raw healthcare data for procedures"
-
-      - name: providers
-        description: "Raw healthcare data for providers"
-
-      - name: supplies
-        description: "Raw healthcare data for supplies"
