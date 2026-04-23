@@ -7,8 +7,11 @@ Earlier version of this project used a dbt-based ETL pipeline on Databricks.
 - Applied basic data tests (`not_null`, `unique`) on key tables like patients, encounters, and claims  
 - Pipeline logic was spread across multiple dbt models
 
- *ETL job run (Phase I – previous design)*
-screenshot here 
+
+  
+### Figure 1: ETL job run (Phase I – previous design)
+  - [![ETL Job run Screenshot](docs/etl_job_run.png)](docs/etl_job_run.png)
+
 ## Phase II: Healthcare Lakehouse with Delta Live Tables (DLT)
 
 **Built a declarative healthcare data pipeline using Delta Live Tables with integrated data quality and streaming ingestion.**
@@ -95,3 +98,6 @@ graph LR
 
 DLT made things easier because I didn’t have to manage job order or dependencies across multiple models. 
 It just figures out the pipeline flow from the tables themselves.
+
+### Figure 1: DLT Pipeline (Phase II)
+- [![DLT Pipeline Screenshot](docs/delta_live_tables.png)](docs/delta_live_tables.png)
