@@ -6,7 +6,7 @@ dbutils.library.restartPython()
 import time
 from openai import OpenAI
 
-GROQ_API_KEY = "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"
+GROQ_API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
 # Setup Connection
 client = OpenAI(

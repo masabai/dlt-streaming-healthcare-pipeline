@@ -9,8 +9,19 @@ Earlier version of this project used a dbt-based ETL pipeline on Databricks.
 
 
   
-### Figure 1: ETL job run (Phase I – previous design)
+### Figure 1: ETL job run (Phase I)
   - [![ETL Job run Screenshot](docs/etl_job_run.png)](docs/etl_job_run.png)
+
+
+## Dashboards
+
+### Figure 1: ETL job run (Phase I)
+  - [![ETL Job run Screenshot](docs/age_conditions.png)](docs/age_conditions.png)
+
+
+### Figure 2: ETL job run (Phase I)
+  - [![ETL Job run Screenshot](docs/top_ten_medications.png)](docs/top_ten_medications.png)
+
 
 ## Phase II: Healthcare Lakehouse with Delta Live Tables (DLT)
 
