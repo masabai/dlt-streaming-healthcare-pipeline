@@ -1,4 +1,4 @@
-## Phase I: Healthcare Lakehouse with dbt-based ETL (Previous Design)
+## Phase I: Healthcare Lakehouse with dbt-based ETL
 
 Earlier version of this project used a dbt-based ETL pipeline on Databricks.
 
@@ -31,7 +31,11 @@ Earlier version of this project used a dbt-based ETL pipeline on Databricks.
 
 ### Overview
 
-This project implements a **Medallion Architecture (Bronze → Silver → Gold)** on Databricks using **Delta Live Tables (DLT)**.
+This project implements a **Medallion Architecture (Bronze → Silver → Gold)** on Databricks 
+using **Delta Live Tables (DLT)**.
+
+It replaces the earlier job-based ETL flow with a declarative pipeline where orchestration
+and data quality are handled within DLT.
 
 It demonstrates how to build a **production-style data pipeline** with:
 - Streaming ingestion (Auto Loader)
