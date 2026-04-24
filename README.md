@@ -26,17 +26,14 @@ Earlier version of this project used a dbt-based ETL pipeline on Databricks.
 ## Phase II: Healthcare Lakehouse with Delta Live Tables (DLT)
 
 **Built a declarative healthcare data pipeline using Delta Live Tables with integrated data quality and streaming ingestion.**
-This design demonstrates a production-style lakehouse pipeline with streaming ingestion, automated data
-quality enforcement, and AI-assisted metadata enrichment.
+
 ---
 
 ### Overview
 
-This project implements a **Medallion Architecture (Bronze → Silver → Gold)** on Databricks 
-using **Delta Live Tables (DLT)**.
-
-It replaces the earlier job-based ETL flow with a declarative pipeline where orchestration
-and data quality are handled within DLT.
+This project implements a **Medallion Architecture (Bronze → Silver → Gold)** on Databricks using **Delta Live Tables (DLT)**
+, a lakehouse pipeline with streaming ingestion, automated data quality enforcement, and AI-assisted metadata enrichment.
+It replaces the earlier job-based ETL flow with a declarative pipeline where orchestration and data quality are handled within DLT.
 
 It demonstrates how to build a **production-style data pipeline** with:
 - Streaming ingestion (Auto Loader)
