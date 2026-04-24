@@ -15,18 +15,19 @@ Earlier version of this project used a dbt-based ETL pipeline on Databricks.
 
 ## Dashboards
 
-### Figure 1: Patient Condition Density vs Age  (Phase I)
+### Figure 2: Patient Condition Density vs Age  (Phase I)
   - [![ETL Scatter Plot Screenshot](docs/age_scatter.png)](docs/age_scatter.png)
 
 
-### Figure 2: Top Medications  (Phase I)
+### Figure 3: Top Medications  (Phase I)
   - [![ETL Bar Graph Screenshot](docs/top_medications.png)](docs/top_medications.png)
 
 
 ## Phase II: Healthcare Lakehouse with Delta Live Tables (DLT)
 
 **Built a declarative healthcare data pipeline using Delta Live Tables with integrated data quality and streaming ingestion.**
-
+This design demonstrates a production-style lakehouse pipeline with streaming ingestion, automated data
+quality enforcement, and AI-assisted metadata enrichment.
 ---
 
 ### Overview
@@ -95,11 +96,12 @@ graph LR
 
 **Built business-ready and AI-enriched tables for analytics and exploration.**
 
-- AI-generated semantic mapping of healthcare description fields into short human-readable meanings using `ai_query`
-- Aggregated EDA tables such as `top_conditions`
-- Summary statistics tables like `ai_summary_stats` for text and field-level insights
+- AI-generated semantic mapping of healthcare description fields into human-readable meanings using `ai_query`
+- Built aggregated EDA tables such as `top_conditions`
+- Created `ai_summary_stats` for structured insights from text-heavy fields
 
 ---
+
 ### DLT Features Used
 
 - `@dlt.table` for declarative pipeline
