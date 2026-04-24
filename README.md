@@ -6,7 +6,7 @@ Earlier version of this project used a dbt-based ETL pipeline on Databricks.
 - Used `dbt run` for transformations across layers  
 - Applied basic data tests (`not_null`, `unique`) on key tables like patients, encounters, and claims  
 - Pipeline logic was spread across multiple dbt models
-
+- Added the agent task to populate Unity Catalog column comments with AI-generated descriptions using `openai/gpt-oss-120b` via Groq
 
   
 ### Figure 1: ETL job run (Phase I)
