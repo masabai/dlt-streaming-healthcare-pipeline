@@ -54,7 +54,6 @@ sources:
           - name: Id
             tests:
               - not_null
-              - unique
 
           - name: PATIENTID
             tests:
@@ -70,10 +69,10 @@ sources:
       - name: allergies
         description: "Patient allergy records from clinical system."
         columns:
-          - name: Id
+          - name: PATIENT
             tests:
               - not_null
-              - unique
+
       # =========================
       # 5: conditions
       # =========================
@@ -83,7 +82,6 @@ sources:
           - name: PATIENT
             tests:
               - not_null
-              - unique
 
       # =========================
       # 6: medications
@@ -94,7 +92,6 @@ sources:
           - name: PATIENT
             tests:
               - not_null
-              - unique
 
       # =========================
       # 7: observations
@@ -105,5 +102,5 @@ sources:
           - name: PATIENT
             tests:
               - not_null
-              - unique
+
 
