@@ -15,12 +15,12 @@ Earlier version of this project used a dbt-based ETL pipeline on Databricks.
 
 ## Dashboards
 
-### Figure 1: Age - Conditions  (Phase I)
+### Figure 1: Patient Condition Density vs Age  (Phase I)
   - [![ETL Scatter Plot Screenshot](docs/age_scatter.png)](docs/age_scatter.png)
 
 
 ### Figure 2: Top Conditions  (Phase I)
-  - [![ETL Bar Graph Screenshot](docs/top_conditions.png)](docs/top_conditions.png)
+  - [![ETL Bar Graph Screenshot](docs/top_medications.png)](docs/top_medications.png)
 
 
 ## Phase II: Healthcare Lakehouse with Delta Live Tables (DLT)
