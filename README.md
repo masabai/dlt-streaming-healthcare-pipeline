@@ -5,6 +5,7 @@ Earlier version of this project used a dbt-based ETL pipeline on Databricks.
 - Built Bronze → Silver → Gold layers using dbt models  
 - Used `dbt run` for transformations across layers  
 - Applied basic data tests (`not_null`, `unique`) on key tables like patients, encounters, and claims  
+- Implemented column-level data masking for sensitive PHI (DOB) using Unity Catalog role-based access control
 - Pipeline logic was spread across multiple dbt models
 - Added the agent task to populate Unity Catalog column comments with AI-generated descriptions using `openai/gpt-oss-120b` via Groq
 
@@ -12,14 +13,15 @@ Earlier version of this project used a dbt-based ETL pipeline on Databricks.
 ### Figure 1: ETL job run (Phase I)
   - [![ETL Job run Screenshot](docs/etl_job_run.png)](docs/etl_job_run.png)
 
+### Figure 2: Mask PII (Phase I)
+  - [![ETL Mask PII Screenshot](docs/mask_pii.png)](docs/mask_pii.png)
 
-## Dashboards
 
-### Figure 2: Patient Condition Density vs Age  (Phase I)
+### Figure 3: Dashboard - Patient Condition Density vs Age  (Phase I)
   - [![ETL Scatter Plot Screenshot](docs/age_scatter.png)](docs/age_scatter.png)
 
 
-### Figure 3: Top Medications  (Phase I)
+### Figure 4: Dashboard - op Medications  (Phase I)
   - [![ETL Bar Graph Screenshot](docs/top_medications.png)](docs/top_medications.png)
 
 
