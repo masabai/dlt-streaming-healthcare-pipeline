@@ -10,18 +10,18 @@ Earlier version of this project used a dbt-based ETL pipeline on Databricks.
 - Added the agent task to populate Unity Catalog column comments with AI-generated descriptions using `openai/gpt-oss-120b` via Groq
 
   
-### Figure 1: ETL job run (Phase I)
+### Figure 1: ETL job run 
   - [![ETL Job run Screenshot](docs/etl_job_run.png)](docs/etl_job_run.png)
 
-### Figure 2: Mask PII (Phase I)
+### Figure 2: Mask PII 
   - [![ETL Mask PII Screenshot](docs/mask_pii.png)](docs/mask_pii.png)
 
 
-### Figure 3: Dashboard - Patient Condition Density vs Age  (Phase I)
+### Figure 3: Dashboard - Patient Condition Density vs Age  
   - [![ETL Scatter Plot Screenshot](docs/age_scatter.png)](docs/age_scatter.png)
 
 
-### Figure 4: Dashboard - op Medications  (Phase I)
+### Figure 4: Dashboard - op Medications  
   - [![ETL Bar Graph Screenshot](docs/top_medications.png)](docs/top_medications.png)
 
 
