@@ -152,9 +152,9 @@ def observations_bronze():
 # SILVER LAYER - DATA CLEANING
 # ====================================================================================================
 @sdp.table(
-    name="patient_delta.gold.patients_silver",
+    name="patient_delta.silver.patients_silver",
     comment="Cleaned patients - Silver layer",
-    table_properties={"quality": "gold"}
+    table_properties={"quality": "silver"}
 )
 # TABLE : PATIENTS
 def patients_silver():
@@ -177,9 +177,9 @@ def patients_silver():
 
 # TABLE : CLAIMS
 @sdp.table(
-    name="patient_delta.gold.claims_silver",
+    name="patient_delta.silver.claims_silver",
     comment="Cleaned claims - Silver layer",
-    table_properties={"quality": "gold"}
+    table_properties={"quality": "silver"}
 )
 def claims_silver():
     df = spark.read.table("patient_delta.bronze.claims_bronze")
@@ -246,9 +246,9 @@ def claims_silver():
 
 # TABLE: ENCOUNTERS
 @sdp.table(
-    name="patient_delta.gold.encounters_silver",
+    name="patient_delta.silver.encounters_silver",
     comment="Cleaned encounters - Silver layer",
-    table_properties={"quality": "gold"}
+    table_properties={"quality": "silver"}
 )
 def encounters_silver():
     # Read Bronze
