@@ -2,9 +2,8 @@ from pyspark.sql.functions import *
 from pyspark import pipelines as sdp
 import re
 
-
 # ====================================================================================================
-# Helper Functions
+# Auto Loader
 # ====================================================================================================
 def build_bronze_stream(source_path: str, schema_location: str):
     """Create an Auto Loader streaming DataFrame from a CSV source."""
@@ -18,23 +17,6 @@ def build_bronze_stream(source_path: str, schema_location: str):
         .option("rescuedDataColumn", "_rescued_data")
         .load(source_path)
     )
-
-
-def to_snake_case(df):
-    """
-    Converts DataFrame column names to snake_case safely.
-    Example: FIRST_NAME -> first_name, HEALTHCAREEXPENSES -> healthcare_expenses
-    """
-
-    def convert(name: str) -> str:
-        s1 = re.sub(r"[\s\-]+", "_", name)  # Replace non-alphanumeric with underscore
-        s2 = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", s1)  # Handle camelCase
-        s3 = re.sub("([a-z0-9])([A-Z])", r"\1_\2", s2)  # Handle remaining lowercase
-
-        return s3.lower()
-
-    return df.toDF(*[convert(c) for c in df.columns])
-
 
 # ====================================================================================================
 # BRONZE LAYER - Raw Ingestion
@@ -91,7 +73,6 @@ def claims_bronze():
                                schema_location="/Volumes/patient_delta/bronze/raw_data/checkpoints/schema_claims"
                                )
 
-
 @sdp.table(
     name="patient_delta.bronze.allergies_bronze",
     comment="Raw Synthea allergiess ingested via Auto Loader",
@@ -118,22 +99,6 @@ def conditions_bronze():
     return build_bronze_stream(source_path="/Volumes/patient_delta/bronze/raw_data/csv/conditions/",
                                schema_location="/Volumes/patient_delta/bronze/raw_data/checkpoints/schema_conditions"
                                )
-
-
-@sdp.table(
-    name="patient_delta.bronze.medications_bronze",
-    comment="Raw Synthea medications ingested via Auto Loader",
-    table_properties={"quality": "bronze"}
-)
-@sdp.expect_or_fail("code_not_null", "CODE IS NOT NULL")
-@sdp.expect("patient_not_null", "PATIENT IS NOT NULL")
-@sdp.expect("start_not_null", "START IS NOT NULL")
-def medications_bronze():
-    return build_bronze_stream(source_path="/Volumes/patient_delta/bronze/raw_data/csv/medications/",
-                               schema_location="/Volumes/patient_delta/bronze/raw_data/checkpoints/schema_medications"
-                               )
-
-
 @sdp.table(
     name="patient_delta.bronze.observations_bronze",
     comment="Raw Synthea observations ingested via Auto Loader",
@@ -161,7 +126,6 @@ def patients_silver():
     df = spark.read.table("patient_delta.bronze.patients_bronze")
     df = df.filter(col("Id").isNotNull())
     df = df.filter(col("GENDER").isin(['M', 'F', 'O', 'U']))
-    df = to_snake_case(df)
 
     return df.select(
         col("id").cast("string").alias("patient_id"),
@@ -186,7 +150,6 @@ def claims_silver():
     df = df.filter(col("Id").isNotNull())
     df = df.filter(col("PATIENTID").isNotNull())
     df = df.filter(col("SERVICEDATE").isNotNull())
-    df = to_snake_case(df)
 
     return df.select(
 
@@ -221,9 +184,9 @@ def claims_silver():
         # Dates
         col("currentillnessdate").cast("timestamp").alias("current_illness_date"),
         col("servicedate").cast("timestamp").alias("service_date"),
-        col("lastbilleddate1").cast("timestamp"),
-        col("lastbilleddate2").cast("timestamp"),
-        col("lastbilleddatep").cast("timestamp"),
+        col("lastbilleddate1").cast("timestamp").alias("last_billed_date_1"),
+        col("lastbilleddate2").cast("timestamp").alias("last_billed_date_2"),
+        col("lastbilleddatep").cast("timestamp").alias("last_billed_date_p"),
 
         # Status
         col("status1"),
@@ -236,8 +199,11 @@ def claims_silver():
         col("outstandingp").cast("double"),
 
         # Claim type
-        col("healthcareclaimtypeid1").cast("integer"),
-        col("healthcareclaimtypeid2").cast("integer"),
+        col("healthcareclaimtypeid1").cast("integer").alias("healthcare_claim_type_id_1"),
+        col("healthcareclaimtypeid2").cast("integer").alias("healthcare_claim_type_id_2"),
+
+        # Codes
+        col("code").cast("integer"),
 
         # Metadata
         current_timestamp().alias("ingested_at")
@@ -256,7 +222,6 @@ def encounters_silver():
     df = df.filter(col("Id").isNotNull())
     df = df.filter(col("PATIENT").isNotNull())
     df = df.filter(col("START").isNotNull())
-    df = to_snake_case(df)
 
     return df.select(
 
@@ -300,8 +265,8 @@ def encounters_silver():
     comment="Gold: patient-level health summary"
 )
 def patient_summary():
-    patients = spark.read.table("patient_delta.gold.patients_silver")
-    encounters = spark.read.table("patient_delta.gold.encounters_silver")
+    patients = spark.read.table("patient_delta.silver.patients_silver")
+    encounters = spark.read.table("patient_delta.silver.encounters_silver")
 
     enc_count = encounters.groupBy("patient_id").count()
 
@@ -321,7 +286,7 @@ def patient_summary():
     comment="Gold: number of encounters per patient"
 )
 def encounters_per_patient():
-    df = spark.read.table("patient_delta.gold.encounters_silver")
+    df = spark.read.table("patient_delta.silver.encounters_silver")
 
     return df.groupBy("patient_id").count().selectExpr(
         "patient_id",
@@ -335,7 +300,7 @@ def encounters_per_patient():
     comment="Gold: total healthcare cost per patient"
 )
 def claims_cost_per_patient():
-    df = spark.read.table("patient_delta.gold.claims_silver")
+    df = spark.read.table("patient_delta.silver.claims_silver")
 
     return df.groupBy("patient_id").agg(
         {"outstanding1": "sum",
@@ -359,18 +324,6 @@ def top_conditions():
     df = spark.read.table("patient_delta.bronze.conditions_bronze")
 
     return df.groupBy("description").count().orderBy("count", ascending=False)
-
-
-# Top Medications
-@sdp.table(
-    name="patient_delta.gold.top_medications",
-    comment="Gold: most prescribed medications"
-)
-def top_medications():
-    df = spark.read.table("patient_delta.bronze.medications_bronze")
-
-    return df.groupBy("description").count().orderBy("count", ascending=False)
-
 
 # Allergy Frequency
 @sdp.table(
